@@ -1,0 +1,174 @@
+{
+  "skill_name": "repo-init",
+  "evals": [
+    {
+      "id": 1,
+      "name": "basic-init",
+      "prompt": "Initialize AI coding infrastructure for a project called 'WebApp' at /tmp/test-webapp. Scaffold the full agents/ directory structure with all template files, skills, and scripts.",
+      "expected_output": "A fully scaffolded agents/ directory with all template files, understand skill copied, and understand scripts copied. All files contain substantive content.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "agents/ai_policy.md exists and contains AI usage policy rules table",
+          "files_check": ["agents/ai_policy.md"],
+          "content_check": {"path": "agents/ai_policy.md", "contains": "Self-Review Obligation"}
+        },
+        {
+          "text": "agents/prompts/common.minimal.md exists with build/test/coding sections",
+          "files_check": ["agents/prompts/common.minimal.md"],
+          "content_check": {"path": "agents/prompts/common.minimal.md", "contains": "Stay on task"}
+        },
+        {
+          "text": "agents/prompts/common.md exists with 8-step workflow",
+          "files_check": ["agents/prompts/common.md"],
+          "content_check": {"path": "agents/prompts/common.md", "contains": "Step 1"}
+        },
+        {
+          "text": "agents/prompts/knowledge_base.md exists with routing tables",
+          "files_check": ["agents/prompts/knowledge_base.md"],
+          "content_check": {"path": "agents/prompts/knowledge_base.md", "contains": "Consult, then Answer"}
+        },
+        {
+          "text": "agents/skills/understand/SKILL.md exists (the understand skill)",
+          "files_check": ["agents/skills/understand/SKILL.md"]
+        },
+        {
+          "text": "agents/skills/understand-dashboard/SKILL.md exists",
+          "files_check": ["agents/skills/understand-dashboard/SKILL.md"]
+        },
+        {
+          "text": "scripts/understand/scan_project.py exists",
+          "files_check": ["scripts/understand/scan_project.py"]
+        },
+        {
+          "text": "scripts/understand/generate_context.py exists",
+          "files_check": ["scripts/understand/generate_context.py"]
+        },
+        {
+          "text": "scripts/understand/build_graph.py exists",
+          "files_check": ["scripts/understand/build_graph.py"]
+        },
+        {
+          "text": "scripts/understand/launch_dashboard.py exists",
+          "files_check": ["scripts/understand/launch_dashboard.py"]
+        },
+        {
+          "text": "scripts/chromium_docs.py exists",
+          "files_check": ["scripts/chromium_docs.py"]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "dry-run",
+      "prompt": "Preview what repo-init would create for a project called 'APIServer' at /tmp/test-apiserver without writing any files.",
+      "expected_output": "Dry-run preview showing what would be created, no files written.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Output shows DRY RUN indicator",
+          "output_check": {"contains": "DRY RUN"}
+        },
+        {
+          "text": "Output shows WOULD CREATE for template files",
+          "output_check": {"contains": "WOULD CREATE"}
+        },
+        {
+          "text": "No files created on disk",
+          "files_check": ["agents/ai_policy.md"],
+          "should_exist": false
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "force-overwrite",
+      "prompt": "Re-run repo-init on /tmp/test-webapp with --force to overwrite existing files. The project name is 'WebApp'.",
+      "expected_output": "All files overwritten with fresh content.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Output shows OVERWRITTEN for existing files",
+          "output_check": {"contains": "OVERWRITTEN"}
+        },
+        {
+          "text": "All expected files still exist after overwrite",
+          "files_check": [
+            "agents/ai_policy.md",
+            "agents/prompts/common.minimal.md",
+            "agents/prompts/common.md",
+            "agents/skills/understand/SKILL.md",
+            "scripts/understand/scan_project.py"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "skip-existing",
+      "prompt": "Run repo-init again on /tmp/test-webapp WITHOUT --force. It should skip existing files.",
+      "expected_output": "All existing files skipped, none modified.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Output shows SKIP (exists) for files",
+          "output_check": {"contains": "SKIP (exists)"}
+        },
+        {
+          "text": "Summary shows 0 created",
+          "output_check": {"contains": "0 created"}
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "understand-pipeline",
+      "prompt": "After initializing repo-init at /tmp/test-webapp, run the understand pipeline to analyze the codebase. First run generate_context.py, then build_graph.py. Show me the context summary and the graph stats.",
+      "expected_output": "The understand pipeline runs successfully, producing context.md and knowledge-graph.json with meaningful project analysis.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "generate_context.py runs without errors",
+          "files_check": [".understand/context.json", ".understand/context.md"]
+        },
+        {
+          "text": "context.md contains project analysis sections",
+          "content_check": {"path": ".understand/context.md", "contains": "Build System"}
+        },
+        {
+          "text": "build_graph.py runs without errors",
+          "files_check": [".understand/knowledge-graph.json"]
+        },
+        {
+          "text": "knowledge-graph.json has nodes and edges",
+          "json_check": {"path": ".understand/knowledge-graph.json", "has_key": "nodes"}
+        },
+        {
+          "text": "knowledge-graph.json has layers",
+          "json_check": {"path": ".understand/knowledge-graph.json", "has_key": "layers"}
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "validation-checklist",
+      "prompt": "After running repo-init for 'WebApp' at /tmp/test-webapp, check the validation output. What does it report?",
+      "expected_output": "Validation shows all critical files present and warns about placeholder example-skill.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Validation shows checkmarks for critical files",
+          "output_check": {"contains": "✓"}
+        },
+        {
+          "text": "Validation warns about example-skill placeholder",
+          "output_check": {"contains": "example-skill"}
+        },
+        {
+          "text": "Validation says 'All critical files present'",
+          "output_check": {"contains": "All critical files present"}
+        }
+      ]
+    }
+  ]
+}
