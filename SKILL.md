@@ -20,7 +20,7 @@ metadata:
 
 # repo-init
 
-Scaffold a production-ready **AI Coding infrastructure** for any repository, inspired by Chromium's `agents/` directory and Understand-Anything's codebase analysis pipeline.
+Scaffold a production-ready **AI Coding infrastructure** for any repository, inspired by [Chromium's `agents/` directory](https://chromium.googlesource.com/chromium/src/+/main/agents/) and [Understand-Anything](https://github.com/Lum1104/Understand-Anything)'s codebase analysis pipeline.
 
 ## When to Use
 
@@ -198,6 +198,11 @@ See `references/customization-guide.md` for detailed instructions.
 - **Codebase Understanding**: Every repo gets a built-in analysis pipeline — scan, analyze, graph, tour
 
 See `references/design-principles.md` for the full rationale.
+
+## Acknowledgments
+
+- **[Chromium](https://chromium.googlesource.com/chromium/src/+/main/agents/)** — AI Coding infrastructure design: layered prompts, skills, knowledge base routing, eval suites, and the philosophy that "AI is a tool, not an author."
+- **[Understand-Anything](https://github.com/Lum1104/Understand-Anything)** by [@Lum1104](https://github.com/Lum1104) — Codebase analysis pipeline architecture: project scanning, architecture layer detection, knowledge graph generation, and guided onboarding tours.
 
 ## Validation Checklist
 

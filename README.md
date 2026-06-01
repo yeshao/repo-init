@@ -78,6 +78,11 @@ The `generate_context.py` script (pure Python, no LLM needed) detects:
 - Python 3.9+
 - No external dependencies — all scripts use only the standard library
 
+## Acknowledgments
+
+- **[Chromium](https://chromium.googlesource.com/chromium/src/+/main/agents/)** — for the AI Coding infrastructure design: layered prompts, skills system, knowledge base routing, eval suites, and the philosophy that "AI is a tool, not an author."
+- **[Understand-Anything](https://github.com/Lum1104/Understand-Anything)** by [@Lum1104](https://github.com/Lum1104) — for the codebase analysis pipeline architecture: project scanning, architecture layer detection, knowledge graph generation, and guided onboarding tours.
+
 ## License
 
 MIT
