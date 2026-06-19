@@ -2,7 +2,30 @@
 
 > Scaffold a complete AI Coding infrastructure and codebase analysis pipeline into any repository — in one command.
 
+[![CI](https://github.com/yeshao/repo-init/actions/workflows/ci.yml/badge.svg)](https://github.com/yeshao/repo-init/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 `repo-init` initializes a production-ready AI Coding infrastructure (inspired by [Chromium's `agents/` directory](https://chromium.googlesource.com/chromium/src/+/main/agents/)) and a codebase analysis pipeline (inspired by [Understand-Anything](https://github.com/Lum1104/Understand-Anything)) into any repository.
+
+## Why This Exists
+
+AI coding agents fail on new repositories because they don't know:
+
+- ❌ **How to build/test/lint** — every project has different commands
+- ❌ **Framework conventions** — React ≠ Django ≠ Spring
+- ❌ **Architecture** — where is the API layer? The data layer?
+- ❌ **Documentation routes** — which doc answers which question?
+
+Without this context, AI agents guess — and guessed code is buggy code. `repo-init` solves this by scaffolding a complete AI-aware infrastructure **and** auto-analyzing your codebase to populate it.
+
+### Before → After
+
+| Before | After `repo-init` |
+|--------|-------------------|
+| AI agent guesses build commands | `.understand/context.md` provides exact `build`, `test`, `lint` commands |
+| AI doesn't know your framework | Templates pre-configured with framework-specific patterns |
+| AI can't find relevant docs | Knowledge base routing table maps questions to doc paths |
+| No AI behavior regression tests | Eval test suite catches prompt regressions |
+| Manual codebase exploration | Interactive knowledge graph + guided onboarding tour |
 
 ## What It Does
 
@@ -43,13 +66,52 @@ A 4-phase Python pipeline that analyzes any codebase and produces structured kno
 
 The context file (`.understand/context.md`) is specifically designed to be read by an LLM to auto-customize all the AI Coding templates with project-specific build commands, doc routes, and debug patterns.
 
+### How the Two Features Connect
+
+This is the key insight: **the analysis pipeline feeds the infrastructure**.
+
+```
+init_ai_coding.py          generate_context.py
+       │                         │
+       ▼                         ▼
+  agents/ templates          .understand/context.md
+  (generic placeholders)     (project-specific: build cmds, frameworks, doc routes)
+       │                         │
+       └───────── LLM reads ──────┘
+                    │
+                    ▼
+         Customized templates with
+         YOUR project's conventions
+```
+
+1. Run `init_ai_coding.py` → scaffolds `agents/` with generic templates
+2. Run `generate_context.py` → analyzes your codebase → produces `context.md`
+3. An LLM reads `context.md` → auto-customizes `agents/prompts/common.md`, `agents/prompts/templates/default.md`, `agents/prompts/knowledge_base.md` with **your project's** build commands, framework patterns, and doc routes
+
 ## Quick Start
 
-```bash
-# Install the skill
-cp -r repo-init ~/.config/opencode/skills/repo-init
+### One-Liner Install
 
-# Initialize a repository
+```bash
+# Download and install (Unix/macOS)
+curl -fsSL https://raw.githubusercontent.com/yeshao/repo-init/main/scripts/install.sh | bash
+
+# Or clone and install manually
+git clone https://github.com/yeshao/repo-init.git
+cd repo-init && bash scripts/install.sh
+```
+
+### Manual Install
+
+```bash
+# Install the skill (for OpenCode / compatible agents)
+cp -r repo-init ~/.config/opencode/skills/repo-init
+```
+
+### Initialize a Repository
+
+```bash
+# Scaffold AI infrastructure
 python3 scripts/init_ai_coding.py --dir /path/to/my-project --project-name "My Project"
 
 # Preview before writing
@@ -73,10 +135,21 @@ The `generate_context.py` script (pure Python, no LLM needed) detects:
 - **Language-specific patterns** — Common errors and debugging routes for 10+ languages
 - **Architecture layers** — Directory-based detection of API, Service, Data, UI, Middleware, Infrastructure layers
 
+### Try It Now
+
+```bash
+# See what repo-init does to a real repo
+python3 scripts/init_ai_coding.py --dir /tmp/test-init --project-name "Test" --dry-run
+```
+
 ## Requirements
 
 - Python 3.9+
 - No external dependencies — all scripts use only the standard library
+
+## Contributing
+
+Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## Acknowledgments
 
