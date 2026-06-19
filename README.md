@@ -35,26 +35,52 @@ Scaffolds a layered prompt system, reusable skills, a knowledge base with docume
 
 ```
 agents/
-├── ai_policy.md                    # AI usage policy (human accountability)
+├── ai_policy.md                        # AI usage policy (human accountability)
 ├── prompts/
-│   ├── common.minimal.md          # Core build/test/coding instructions
-│   ├── common.md                  # 8-step standard workflow
-│   ├── knowledge_base.md          # Agentic RAG document routing table
-│   ├── templates/default.md       # Platform build targets & test commands
-│   ├── eval/                      # AI behavior regression test suite
-│   └── commands/                  # Task prompt shortcut templates
+│   ├── common.minimal.md              # Core build/test/coding instructions
+│   ├── common.md                      # 8-step standard workflow
+│   ├── knowledge_base.md              # Agentic RAG document routing table
+│   ├── templates/
+│   │   ├── default.md                   # Platform build targets & test commands
+│   │   └── README.md                   # Templates directory guide
+│   ├── eval/
+│   │   ├── README.md                   # Eval framework guide
+│   │   └── example/
+│   │       ├── prompt.md               # Example eval prompt
+│   │       └── eval.md                 # Example eval assertions
+│   └── commands/
+│       └── README.md                   # Commands directory guide
 ├── skills/
-│   ├── understand/SKILL.md        # Codebase analysis & knowledge graph
-│   └── understand-dashboard/SKILL.md  # Interactive dashboard launcher
-├── extensions/                    # MCP extensions placeholder
-└── projects/                      # Large-scale AI project templates
+│   ├── README.md                       # Skills directory guide
+│   ├── example-skill/
+│   │   └── SKILL.md                    # Example skill placeholder
+│   ├── understand/
+│   │   └── SKILL.md                    # Codebase analysis & knowledge graph
+│   └── understand-dashboard/
+│       └── SKILL.md                    # Interactive dashboard launcher
+├── extensions/
+│   └── README.md                       # MCP extensions placeholder
+├── projects/
+│   └── README.md                       # Large-scale AI project templates
+├── references/
+│   ├── customization-guide.md          # How to customize templates
+│   ├── design-principles.md           # Design philosophy
+│   └── structure.md                    # Project structure overview
+scripts/
+├── chromium_docs.py                    # Document search tool
+└── understand/
+    ├── generate_context.py             # Context generation (runs scan internally)
+    ├── scan_project.py                 # File inventory & language detection
+    ├── analyze_architecture.py         # Architecture layer detection
+    ├── build_graph.py                  # Knowledge graph builder
+    └── launch_dashboard.py             # Interactive web dashboard
 ```
 
 Based on how Chromium structures AI-assisted development at scale — layered composable prompts, on-demand skills, Agentic RAG, and eval-driven quality.
 
 ### 2. Codebase Analysis Pipeline
 
-A 4-phase Python pipeline that analyzes any codebase and produces structured knowledge:
+A 5-phase Python pipeline that analyzes any codebase and produces structured knowledge:
 
 | Phase | Script | Output |
 |-------|--------|--------|
@@ -65,6 +91,8 @@ A 4-phase Python pipeline that analyzes any codebase and produces structured kno
 | **Dashboard** | `launch_dashboard.py` | Interactive web dashboard for exploration |
 
 The context file (`.understand/context.md`) is specifically designed to be read by an LLM to auto-customize all the AI Coding templates with project-specific build commands, doc routes, and debug patterns.
+
+> **Note:** `generate_context.py` runs the scan phase internally. Architecture analysis (`analyze_architecture.py`) is a separate step — run it after the context phase to get layer detection.
 
 ### How the Two Features Connect
 
@@ -119,8 +147,9 @@ python3 scripts/init_ai_coding.py --dir /path/to/my-project --dry-run
 
 # Analyze the codebase
 cd /path/to/my-project
-python3 scripts/understand/generate_context.py .
+python3 scripts/understand/generate_context.py .        # context + scan phases
 cat .understand/context.md
+python3 scripts/understand/analyze_architecture.py .      # architecture layer detection
 python3 scripts/understand/build_graph.py . --output .understand/knowledge-graph.json
 python3 scripts/understand/launch_dashboard.py . --port 3000
 ```
@@ -129,18 +158,38 @@ python3 scripts/understand/launch_dashboard.py . --port 3000
 
 The `generate_context.py` script (pure Python, no LLM needed) detects:
 
-- **Build system** — 14+ build tools (Cargo, npm, Go, Python, Ruby, Java, etc.) with correct build/test/lint/check commands
-- **Frameworks** — 50+ frameworks across 7 ecosystems (React, Django, Flask, Rails, Spring, etc.)
+- **Build system** — 16 build tools (Cargo, npm, Go, Python, Ruby, Java, Swift, CMake, etc.) with correct build/test/lint/check commands
+- **Frameworks** — 13 frameworks (React, Vue, Django, Flask, Rails, Spring, FastAPI, Express, Next.js, Docker, Terraform, etc.)
 - **Documentation structure** — Categorizes docs into API reference, architecture, deployment, testing, security, troubleshooting
-- **Language-specific patterns** — Common errors and debugging routes for 10+ languages
+- **Language-specific patterns** — Common errors and debugging routes for 10 languages (Rust, Python, JavaScript, TypeScript, Go, Java, Ruby, PHP, C, C++)
 - **Architecture layers** — Directory-based detection of API, Service, Data, UI, Middleware, Infrastructure layers
 
 ### Try It Now
 
 ```bash
-# See what repo-init does to a real repo
+# Clone and preview (safe — no files written to your target)
+git clone https://github.com/yeshao/repo-init.git
+cd repo-init
 python3 scripts/init_ai_coding.py --dir /tmp/test-init --project-name "Test" --dry-run
 ```
+
+## Requirements
+
+- Python 3.9+
+- No external dependencies — all scripts use only the standard library
+
+## Contributing
+
+Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## Acknowledgments
+
+- **[Chromium](https://chromium.googlesource.com/chromium/src/+/main/agents/)** — for the AI Coding infrastructure design: layered prompts, skills system, knowledge base routing, eval suites, and the philosophy that "AI is a tool, not an author."
+- **[Understand-Anything](https://github.com/Lum1104/Understand-Anything)** by [@Lum1104](https://github.com/Lum1104) — for the codebase analysis pipeline architecture: project scanning, architecture layer detection, knowledge graph generation, and guided onboarding tours.
+
+## License
+
+MIT
 
 ## Requirements
 
